@@ -23,5 +23,13 @@ let () =
 	(* Verifying the nature of arguments *)
 	let open Parser in
 	match !arguments with
-	| [input; jsonfile] -> process (parse jsonfile) input
+	| [input; jsonfile] -> begin
+		try
+			process (parse jsonfile) input
+		with
+		| Parser.Json_malformed msg ->
+				Printf.eprintf "Fatal: %s\n" msg
+		| Parser.Json_syntax_error msg ->
+				Printf.eprintf "Fatal: %s\n" msg
+	end
 	| _ -> print_endline "Fatal: Bad number of arguments"
