@@ -12,7 +12,9 @@ type transition = {
 }
 
 type automaton = {
+  name: string;
   alphabet: string list;
+  blank: string;
   states: string list;
   initial: string;
   finals: string list;
@@ -86,12 +88,20 @@ let read_json jsonfile =
 let parse jsonfile =
   let json = read_json jsonfile in
   let transitions = extract_field "transitions" (mem_to_assoc json) in
+  let name = extract_field "name" (mem_to_str json) in
   let alphabet = extract_field "alphabet" (mem_to_lst_str json) in
+  let blank = extract_field "blank" (mem_to_str json) in
   let states = extract_field "states" (mem_to_lst_str json) in
   let finals = extract_field "finals" (mem_to_lst_str json) in
   let initial = extract_field "initial" (mem_to_str json) in
   {
+    name;
     alphabet;
+    blank = if List.exists (fun a -> a = blank) alphabet then blank
+    else
+      raise (Json_malformed_value (
+        "Bad json input: 'blank' is not in known alphabet"
+      ));
     states;
     initial = if List.exists (fun state -> state = initial) states then initial
       else
@@ -111,7 +121,9 @@ let parse jsonfile =
   }
 
 let process algo input = 
+  Printf.printf "Name: %s \n" algo.name;
   Printf.printf "Alphabet: [ %s ]\n" (String.concat ", " algo.alphabet);
+  Printf.printf "Blank: %s \n" algo.blank;
   Printf.printf "States: [ %s ]\n" (String.concat ", " algo.states);
   Printf.printf "Initial: %s \n" algo.initial;
   Printf.printf "Finals: [ %s ]\n" (String.concat ", " algo.finals);
