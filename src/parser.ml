@@ -129,6 +129,7 @@ let process algo input =
   Printf.printf "Finals: [ %s ]\n" (String.concat ", " algo.finals);
   List.iter (fun (state, transitions) ->
     List.iter (fun trans ->
-      Printf.printf "(%s, %s) -> (%s, %s, %s)\n" state trans.read trans.to_state trans.write trans.action
+      Printf.printf "(%s, %s) -> (%s, %s, %s)\n" state trans.read trans.to_state
+        trans.write trans.action
     ) transitions
   ) algo.transitions
