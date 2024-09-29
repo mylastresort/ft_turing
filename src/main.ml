@@ -31,5 +31,7 @@ let () =
 				Printf.eprintf "Fatal: %s\n" msg
 		| Parser.Json_syntax_error msg ->
 				Printf.eprintf "Fatal: %s\n" msg
+		| Parser.Json_malformed_value msg ->
+				Printf.eprintf "Fatal: %s\n" msg
 	end
 	| _ -> print_endline "Fatal: Bad number of arguments"
