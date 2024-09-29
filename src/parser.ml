@@ -1,5 +1,6 @@
 open Yojson.Basic.Util
 
+exception File_not_found of string
 exception Json_malformed of string
 exception Json_syntax_error of string
 exception Json_malformed_value of string
@@ -82,6 +83,8 @@ let read_json jsonfile =
   try
     Yojson.Basic.from_file jsonfile
   with
+  | Sys_error msg ->
+      raise (File_not_found ("File not found.") )
   | Yojson.Json_error msg ->
       raise (Json_syntax_error ("Bad json syntax: " ^ msg)) 
 

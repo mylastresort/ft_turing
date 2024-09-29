@@ -27,6 +27,8 @@ let () =
 		try
 			process (parse jsonfile) input
 		with
+		| Parser.File_not_found msg ->
+				Printf.eprintf "Fatal: %s\n" msg
 		| Parser.Json_malformed msg ->
 				Printf.eprintf "Fatal: %s\n" msg
 		| Parser.Json_syntax_error msg ->
