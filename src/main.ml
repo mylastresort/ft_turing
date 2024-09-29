@@ -1,9 +1,11 @@
+let usage_description = "usage: ft_turing [-h] jsonfile input"
 (* Usage Description *)
-let usage_msg = "usage: ft_turing [-h] jsonfile input\n
+let usage_msg = usage_description ^ "\n
 positional arguments:
   jsonfile            json description of the machine\n
   input               input of the machine\n
-optional arguments:"
+optional arguments:
+  -h, --help          show this list of options.\n"
 
 (* List of arguments *)
 let arguments = ref []
@@ -12,28 +14,29 @@ let arguments = ref []
 let anon_fun filename =
 	arguments := filename :: !arguments
 
-let help = ref false
-
-let speclist = [("-h", Arg.Set help, "Display this list of options")]
+let speclist = [("-h", Arg.Unit (fun () -> raise (Arg.Help usage_msg)),
+							"show this help message and exit")]
 
 (* Main *)
 let () =
-	(* handles the parsing of command arguments *)
-	Arg.parse speclist anon_fun usage_msg;
-	(* Verifying the nature of arguments *)
-	let open Parser in
-	match !arguments with
-	| [input; jsonfile] -> begin
-		try
-			process (parse jsonfile) input
-		with
-		| Parser.File_not_found msg ->
-				Printf.eprintf "Fatal: %s\n" msg
-		| Parser.Json_malformed msg ->
-				Printf.eprintf "Fatal: %s\n" msg
-		| Parser.Json_syntax_error msg ->
-				Printf.eprintf "Fatal: %s\n" msg
-		| Parser.Json_malformed_value msg ->
-				Printf.eprintf "Fatal: %s\n" msg
-	end
-	| _ -> print_endline "Fatal: Bad number of arguments"
+	try
+		Arg.parse_argv Sys.argv speclist anon_fun usage_msg;
+		let open Parser in
+		match !arguments with
+		| [input; jsonfile] ->
+				process (parse jsonfile) input
+		| _ -> Printf.eprintf "Fatal: Bad number of arguments\n%s" usage_msg;
+						exit 1
+	with
+	| Arg.Help _ -> Printf.printf "%s" usage_msg
+	| Arg.Bad msg ->
+			Printf.eprintf "%s\nTry './ft_turing -h' for more information.\n"
+				usage_description; exit 1
+	| Parser.File_not_found msg ->
+			Printf.eprintf "Fatal: %s\n" msg; exit 1
+	| Parser.Json_malformed msg ->
+			Printf.eprintf "Fatal: %s\n" msg; exit 1
+	| Parser.Json_syntax_error msg ->
+			Printf.eprintf "Fatal: %s\n" msg; exit 1
+	| Parser.Json_malformed_value msg ->
+			Printf.eprintf "Fatal: %s\n" msg; exit 1
