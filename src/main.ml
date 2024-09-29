@@ -15,7 +15,9 @@ let anon_fun filename =
 	arguments := filename :: !arguments
 
 let speclist = [("-h", Arg.Unit (fun () -> raise (Arg.Help usage_msg)),
-							"show this help message and exit")]
+							"show this help message and exit");
+							("-help", Arg.Unit (fun () -> raise (Arg.Bad "")),
+							"unkown option '-help'")]
 
 (* Main *)
 let () =
