@@ -42,3 +42,4 @@ let () =
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
 	| Parser.Json_malformed_value msg ->
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
+	| _ -> Printf.eprintf "Fatal: Unknown error\n"; exit 1

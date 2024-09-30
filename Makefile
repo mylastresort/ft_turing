@@ -5,21 +5,24 @@ CMO 	= $(SRC:.ml=.cmo)
 OBJ 	= $(CMO) $(CMI)
 SRC 	= $(DIR)/parser.ml $(DIR)/main.ml
 NAME	= ft_turing
-OPAM	= $(shell opam env)
+DEP		= yojson ocamlfind
 
 .PHONY: all clean fclean re
 
 all: $(NAME)
 
 install:
-	opam install yojson
-	opam install ocamlfind
+	opam --version || apt update && apt install opam -y
+	test -r /root/.opam/opam-init/init.sh && . /root/.opam/opam-init/init.sh > /dev/null 2> /dev/null || opam init -y
+	echo 'test -r /root/.opam/opam-init/init.sh && . /root/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true' >> ~/.profile
+	[ ! -d "_opam" ] && opam switch create . $(DEP)
+
 
 $(NAME): $(OBJ)
-	$(CC) $(CMO) -o $@
+	eval $$(opam env); $(CC) $(CMO) -o $@
 
 %.cmo %.cmi: %.ml
-	$(CC) -c $< -I src -o $@
+	eval $$(opam env); $(CC) -c $< -I src -o $@
 
 clean:
 	rm -rf $(OBJ)

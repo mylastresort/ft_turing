@@ -1,0 +1,14 @@
+name: Build ft_turing
+on: [push]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Tree
+        uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          sudo make install
+          opam init
+          eval $(opam env)
+          make
