@@ -3,9 +3,13 @@ DIR		= src
 CMI 	= $(SRC:.ml=.cmi)
 CMO 	= $(SRC:.ml=.cmo)
 OBJ 	= $(CMO) $(CMI)
-SRC 	= $(DIR)/parser.ml $(DIR)/main.ml
+SRC 	= $(DIR)/parser.ml
+MAIN	= $(DIR)/main.ml
 NAME	= ft_turing
 DEP		= yojson ocamlfind
+TEST	= ft_tester
+T_DIR	= test
+T_MAIN	= $(T_DIR)/tester.ml
 
 .PHONY: all clean fclean re install
 
@@ -15,14 +19,19 @@ install:
 	[ ! -d "${HOME}/.opam" ] && opam init --yes || true
 	opam install --yes $(DEP)
 
-$(NAME): $(OBJ)
-	$(CC) $(CMO) -o $@
+$(NAME): $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
+	$(CC) $(CMO) $(MAIN:.ml=.cmo) -o $@
+
+test: install $(TEST)
+
+$(TEST): $(OBJ) $(T_MAIN:.ml=.cmo) $(T_MAIN:.ml=.cmi)
+	$(CC) $(CMO) $(T_MAIN:.ml=.cmo) -o $@
 
 %.cmo %.cmi: %.ml
-	$(CC) -c $< -I src -o $@
+	$(CC) -c $< -I $(DIR) -I $(T_DIR) -o $@
 
 clean:
-	rm -rf $(OBJ)
+	rm -rf $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi) $(T_MAIN:.ml=.cmi) $(T_MAIN:.ml=.cmo)
 
 fclean: clean
 	rm -f $(NAME)
