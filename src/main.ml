@@ -26,7 +26,13 @@ let () =
 		let open Parser in
 		match !arguments with
 		| [input; jsonfile] ->
-				process (parse jsonfile) input
+            let algo = parse jsonfile
+            in (
+                Logger.log_header algo.name;
+                Logger.log_machine algo;
+                print_endline (String.make 80 '*');
+				Machine.process (parse jsonfile) input
+            )
 		| _ -> Printf.eprintf "Fatal: Bad number of arguments\n%s" usage_msg;
 						exit 1
 	with
@@ -42,4 +48,8 @@ let () =
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
 	| Parser.Json_malformed_value msg ->
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
+    | Errors.TransitionTableNotFound state ->
+        Printf.eprintf "Fatal: No transition table found for state \"%s\"\n" state; exit 1
+    | Errors.TransitionNotFound (state, char) ->
+        Printf.eprintf "Fatal: No transition found from (%s, %c)\n" state char; exit 1
 	| _ -> Printf.eprintf "Fatal: Unknown error\n"; exit 1

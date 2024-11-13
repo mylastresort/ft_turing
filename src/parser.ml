@@ -122,17 +122,3 @@ let parse jsonfile =
         states alphabet ["LEFT"; "RIGHT"])
     ) transitions;
   }
-
-let process algo input = 
-  Printf.printf "Name: %s \n" algo.name;
-  Printf.printf "Alphabet: [ %s ]\n" (String.concat ", " algo.alphabet);
-  Printf.printf "Blank: %s \n" algo.blank;
-  Printf.printf "States: [ %s ]\n" (String.concat ", " algo.states);
-  Printf.printf "Initial: %s \n" algo.initial;
-  Printf.printf "Finals: [ %s ]\n" (String.concat ", " algo.finals);
-  List.iter (fun (state, transitions) ->
-    List.iter (fun trans ->
-      Printf.printf "(%s, %s) -> (%s, %s, %s)\n" state trans.read trans.to_state
-        trans.write trans.action
-    ) transitions
-  ) algo.transitions

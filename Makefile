@@ -3,7 +3,7 @@ DIR		= src
 CMI 	= $(SRC:.ml=.cmi)
 CMO 	= $(SRC:.ml=.cmo)
 OBJ 	= $(CMO) $(CMI)
-SRC 	= $(DIR)/parser.ml
+SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml)
 MAIN	= $(DIR)/main.ml
 NAME	= ft_turing
 DEP		= yojson ocamlfind
@@ -17,7 +17,7 @@ all: install $(NAME)
 
 install:
 	[ ! -d "${HOME}/.opam" ] && opam init --yes || true
-	opam install --yes $(DEP)
+	opam list --installed | grep --extended-regexp --silent "yojson|ocamlfind" || opam install --yes $(DEP)
 
 $(NAME): $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
 	$(CC) $(CMO) $(MAIN:.ml=.cmo) -o $@
