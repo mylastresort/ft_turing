@@ -39,6 +39,15 @@ let process (algo : Parser.automaton) (input : string) =
 
         let new_index = _update_index transition.action index in
 
+        let new_tape =
+          match new_index with
+          | i when i < 0 -> algo.blank ^ new_tape
+          | i when i >= String.length new_tape -> new_tape ^ algo.blank
+          | _ -> new_tape
+        in
+
+        let new_index = max new_index 0 in
+
         _loop transition.to_state new_tape new_index
   in
   _loop algo.initial input 0
