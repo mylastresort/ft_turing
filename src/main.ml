@@ -26,12 +26,13 @@ let () =
 		let open Parser in
 		match !arguments with
 		| [input; jsonfile] ->
+            if input = "" then raise Errors.EmptyInput;
             let algo = parse jsonfile
             in (
                 Logger.log_header algo.name;
                 Logger.log_machine algo;
                 print_endline (String.make 80 '*');
-				Machine.process (parse jsonfile) input
+				Machine.process algo input
             )
 		| _ -> Printf.eprintf "Fatal: Bad number of arguments\n%s" usage_msg;
 						exit 1
@@ -48,6 +49,8 @@ let () =
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
 	| Parser.Json_malformed_value msg ->
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
+    | Errors.EmptyInput ->
+        Printf.eprintf "Fatal: Input must not be blank\n"; exit 1
     | Errors.TransitionTableNotFound state ->
         Printf.eprintf "Fatal: No transition table found for state \"%s\"\n" state; exit 1
     | Errors.TransitionNotFound (state, char) ->
