@@ -28,6 +28,7 @@ let () =
 		| [input; jsonfile] ->
             if input = "" then raise Errors.EmptyInput;
             let algo = parse jsonfile
+            in let input = parse_input input (String.concat "" algo.alphabet)
             in (
                 Logger.log_header algo.name;
                 Logger.log_machine algo;
@@ -51,6 +52,8 @@ let () =
 			Printf.eprintf "Fatal: %s\n" msg; exit 1
     | Errors.EmptyInput ->
         Printf.eprintf "Fatal: Input must not be blank\n"; exit 1
+    | Errors.InvalidInput ->
+        Printf.eprintf "Fatal: Input must only contain characters from the specified alphabet\n"; exit 1
     | Errors.TransitionTableNotFound state ->
         Printf.eprintf "Fatal: No transition table found for state \"%s\"\n" state; exit 1
     | Errors.TransitionNotFound (state, char) ->

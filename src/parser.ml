@@ -122,3 +122,10 @@ let parse jsonfile =
         states alphabet ["LEFT"; "RIGHT"])
     ) transitions;
   }
+
+let parse_input input alphabet =
+  let in_alphabet c = String.contains alphabet c in
+  match input with
+  | "" -> raise Errors.EmptyInput
+  | s when String.for_all in_alphabet input -> s
+  | _ -> raise Errors.InvalidInput
