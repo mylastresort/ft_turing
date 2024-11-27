@@ -1,0 +1,21 @@
+{
+    "name": "binary_second",
+    "alphabet": [".", "0", "y", "n"],
+    "blank": ".",
+    "states": ["scanright", "HALT", "scanzero", "finish"],
+    "initial": "scanright",
+    "finals": ["HALT"],
+    "transitions": {
+      "scanright": [
+        { "read": "0", "to_state": "scanzero", "write": "0", "action": "RIGHT" },
+        { "read": ".", "to_state": "finish", "write": "y", "action": "RIGHT" }
+      ],
+      "scanzero": [
+        { "read": "0", "to_state": "scanright", "write": "0", "action": "RIGHT" },
+        { "read": ".", "to_state": "finish", "write": "n", "action": "RIGHT" }
+      ],
+      "finish": [
+        { "read": ".", "to_state": "HALT", "write": ".", "action": "RIGHT" }
+      ]
+    }
+}
