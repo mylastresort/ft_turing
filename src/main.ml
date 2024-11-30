@@ -7,25 +7,15 @@ positional arguments:
 optional arguments:
   -h, --help          show this list of options.\n"
 
-(* List of arguments *)
-let arguments = ref []
-
-(* Function to append to the list of arguments *)
-let anon_fun filename =
-	arguments := filename :: !arguments
-
-let speclist = [("-h", Arg.Unit (fun () -> raise (Arg.Help usage_msg)),
-							"show this help message and exit");
-							("-help", Arg.Unit (fun () -> raise (Arg.Bad "")),
-							"unkown option '-help'")]
-
 (* Main *)
 let () =
 	try
-		Arg.parse_argv Sys.argv speclist anon_fun usage_msg;
 		let open Parser in
-		match !arguments with
-		| [input; jsonfile] ->
+		let arguments = Array.to_list Sys.argv in
+		if List.exists (fun e -> e = "-h" || e = "--help") arguments then
+			Printf.printf "%s" usage_msg
+		else match arguments with
+		| _ :: [jsonfile; input] ->
             if input = "" then raise Errors.EmptyInput;
             let algo = parse jsonfile
             in let input = parse_input input (String.concat "" algo.alphabet)
