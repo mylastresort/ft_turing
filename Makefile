@@ -3,7 +3,7 @@ DIR		= src
 CMI 	= $(SRC:.ml=.cmi)
 CMO 	= $(SRC:.ml=.cmo)
 OBJ 	= $(CMO) $(CMI)
-SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml)
+SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml complexity.ml)
 MAIN	= $(DIR)/main.ml
 NAME	= ft_turing
 DEP		= yojson ocamlfind

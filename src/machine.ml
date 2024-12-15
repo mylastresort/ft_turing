@@ -24,9 +24,9 @@ let _update_index action index =
   if action = "LEFT" then index - 1 else index + 1
 
 let process (algo : Parser.automaton) (input : string) =
-  let rec _loop state input index =
+  let rec _loop state input index counter =
     match List.find_index (fun s -> s = state) algo.finals with
-    | Some final_state -> ()
+    | Some final_state -> counter
     | None ->
         let state, transition_table = _find_transition_table algo state in
 
@@ -48,6 +48,6 @@ let process (algo : Parser.automaton) (input : string) =
 
         let new_index = max new_index 0 in
 
-        _loop transition.to_state new_tape new_index
+        _loop transition.to_state new_tape new_index (counter + 1)
   in
-  _loop algo.initial input 0
+  _loop algo.initial input 0 0

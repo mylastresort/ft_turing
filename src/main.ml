@@ -23,7 +23,7 @@ let () =
                 Logger.log_header algo.name;
                 Logger.log_machine algo;
                 print_endline (String.make 80 '*');
-				Machine.process algo input
+                Machine.process algo input |> Complexity.calculate (String.length input) |> Printf.printf "Time Complexity: %s\n"
             )
 		| _ -> Printf.eprintf "Fatal: Bad number of arguments\n%s" usage_msg;
 						exit 1
