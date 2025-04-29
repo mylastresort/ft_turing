@@ -20,7 +20,7 @@ $(NAME): $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
 	$(CC) $(CMO) $(MAIN:.ml=.cmo) -o $@
 
 %.cmo %.cmi: %.ml
-	$(CC) -c $< -I $(DIR) -I $(T_DIR) -o $@
+	$(CC) -c $< -I $(DIR) -o $@
 
 clean:
 	rm -rf $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi) $(T_MAIN:.ml=.cmi) $(T_MAIN:.ml=.cmo)
