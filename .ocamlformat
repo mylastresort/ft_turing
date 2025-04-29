@@ -1,0 +1,4 @@
+version=0.27.0
+margin=80
+indicate-multiline-delimiters=closing-on-separate-line
+wrap-comments=true
