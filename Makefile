@@ -7,9 +7,6 @@ SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml co
 MAIN	= $(DIR)/main.ml
 NAME	= ft_turing
 DEP		= yojson ocamlfind
-TEST	= ft_tester
-T_DIR	= test
-T_MAIN	= $(T_DIR)/tester.ml
 
 .PHONY: all clean fclean re install
 
@@ -21,11 +18,6 @@ install:
 
 $(NAME): $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
 	$(CC) $(CMO) $(MAIN:.ml=.cmo) -o $@
-
-test: install $(TEST)
-
-$(TEST): $(OBJ) $(T_MAIN:.ml=.cmo) $(T_MAIN:.ml=.cmi)
-	$(CC) $(CMO) $(T_MAIN:.ml=.cmo) -o $@
 
 %.cmo %.cmi: %.ml
 	$(CC) -c $< -I $(DIR) -I $(T_DIR) -o $@
