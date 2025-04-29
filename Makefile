@@ -23,7 +23,7 @@ $(NAME): $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
 	$(CC) -c $< -I $(DIR) -o $@
 
 clean:
-	rm -rf $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi) $(T_MAIN:.ml=.cmi) $(T_MAIN:.ml=.cmo)
+	rm -rf $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
 
 fclean: clean
 	rm -f $(NAME)
