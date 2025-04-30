@@ -29,3 +29,4 @@ setup.log
 _opam/
 ft_turing
 ft_tester
+.depend

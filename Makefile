@@ -1,10 +1,9 @@
-CC 		= opam exec -- ocamlfind ocamlc -package yojson -linkpkg
+CC 		= opam exec -- ocamlfind ocamlopt -package yojson -linkpkg
 DIR		= src
 CMI 	= $(SRC:.ml=.cmi)
-CMO 	= $(SRC:.ml=.cmo)
-OBJ 	= $(CMO) $(CMI)
-SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml complexity.ml)
-MAIN	= $(DIR)/main.ml
+CMX 	= $(SRC:.ml=.cmx)
+OBJ 	= $(CMX) $(CMI) $(SRC:.ml=.o)
+SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml complexity.ml main.ml)
 NAME	= ft_turing
 DEP		= yojson ocamlfind
 
@@ -16,16 +15,21 @@ install:
 	[ ! -d "${HOME}/.opam" ] && opam init --yes || true
 	opam list --installed | grep --extended-regexp --silent "yojson|ocamlfind" || opam install --yes $(DEP)
 
-$(NAME): $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
-	$(CC) $(CMO) $(MAIN:.ml=.cmo) -o $@
+$(NAME): $(OBJ)
+	$(CC) $(CMX) -o $@
 
-%.cmo %.cmi: %.ml
+%.cmx %.cmi %.o: %.ml
 	$(CC) -c $< -I $(DIR) -o $@
 
 clean:
-	rm -rf $(OBJ) $(MAIN:.ml=.cmo) $(MAIN:.ml=.cmi)
+	rm -rf $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) .depend
 
 re: fclean all
+
+.depend:
+	ocamldep -native -I $(DIR) -all $(SRC) > .depend
+
+-include .depend
