@@ -9,7 +9,7 @@ DEP		= yojson ocamlfind ocamldep
 
 .PHONY: all clean fclean re install
 
-all: install $(NAME)
+all: .depend install $(NAME)
 
 install:
 	[ ! -d "${HOME}/.opam" ] && opam init --yes || true
@@ -30,6 +30,6 @@ fclean: clean
 re: fclean all
 
 .depend:
-	ocamldep -native -I $(DIR) -all $(SRC) > .depend
+	opam exec -- ocamldep -native -I $(DIR) -all $(SRC) > .depend
 
 -include .depend
