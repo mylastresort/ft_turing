@@ -22,7 +22,9 @@ let () =
       | _ :: [ jsonfile; input ] ->
           if input = "" then raise Errors.EmptyInput;
           let algo = parse jsonfile in
-          let input = parse_input input (String.concat "" algo.alphabet) in
+          let input =
+            parse_input input (String.concat "" algo.alphabet) algo.blank
+          in
           Logger.log_header algo.name;
           Logger.log_machine algo;
           print_endline (String.make 80 '*');
@@ -33,11 +35,6 @@ let () =
           Printf.eprintf "Fatal: Bad number of arguments\n%s" usage_msg;
           exit 1
   with
-  | Arg.Help _ -> Printf.printf "%s" usage_msg
-  | Arg.Bad msg ->
-      Printf.eprintf "%s\nTry './ft_turing -h' for more information.\n"
-        usage_description;
-      exit 1
   | Parser.File_not_found msg ->
       Printf.eprintf "Fatal: %s\n" msg;
       exit 1
