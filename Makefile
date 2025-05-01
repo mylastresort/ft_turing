@@ -5,7 +5,7 @@ CMX 	= $(SRC:.ml=.cmx)
 OBJ 	= $(CMX) $(CMI) $(SRC:.ml=.o)
 SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml complexity.ml main.ml)
 NAME	= ft_turing
-DEP		= yojson ocamlfind
+DEP		= yojson ocamlfind ocamldep
 
 .PHONY: all clean fclean re install
 
