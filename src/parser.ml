@@ -130,9 +130,12 @@ let parse jsonfile =
         transitions;
   }
 
-let parse_input input alphabet =
+let parse_input input alphabet blank =
+  let blank = String.get blank 0 in
   let in_alphabet c = String.contains alphabet c in
+
   match input with
   | "" -> raise Errors.EmptyInput
-  | s when String.for_all in_alphabet input -> s
+  | s when String.contains input blank -> raise Errors.InputHasBlank
+  | s when String.for_all in_alphabet s -> s
   | _ -> raise Errors.InvalidInput

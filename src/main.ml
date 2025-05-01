@@ -57,6 +57,9 @@ let () =
       Printf.eprintf
         "Fatal: Input must only contain characters from the specified alphabet\n";
       exit 1
+  | Errors.InputHasBlank ->
+      Printf.eprintf "Fatal: Input must not contain blank characters\n";
+      exit 1
   | Errors.TransitionTableNotFound state ->
       Printf.eprintf "Fatal: No transition table found for state \"%s\"\n" state;
       exit 1
