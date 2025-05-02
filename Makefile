@@ -5,11 +5,11 @@ CMX 	= $(SRC:.ml=.cmx)
 OBJ 	= $(CMX) $(CMI) $(SRC:.ml=.o)
 SRC 	= $(addprefix $(DIR)/, utils.ml errors.ml parser.ml logger.ml machine.ml complexity.ml main.ml)
 NAME	= ft_turing
-DEP		= yojson ocamlfind ocamldep
+DEP		= yojson ocamlfind
 
-.PHONY: all clean fclean re install
+.PHONY: all clean fclean re install depend
 
-all: .depend install $(NAME)
+all: install depend $(NAME)
 
 install:
 	[ ! -d "${HOME}/.opam" ] && opam init --yes || true
@@ -29,7 +29,7 @@ fclean: clean
 
 re: fclean all
 
-.depend:
+depend:
 	opam exec -- ocamldep -native -I $(DIR) -all $(SRC) > .depend
 
 -include .depend
